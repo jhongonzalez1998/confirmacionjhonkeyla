@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RSVP - Confirmación de Asistencia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #f7f1eb;
+      font-family: 'Montserrat', sans-serif;
+      color: #333333;
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px;
+      position: relative;
+    }
+
+    /* Botón flotante para la música */
+    .music-control {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #fcf8f5;
+      border: 1px solid #b08a5b;
+      color: #b08a5b;
+      padding: 10px 16px;
+      border-radius: 30px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .music-control:hover {
+      background-color: #b08a5b;
+      color: #ffffff;
+    }
+
+    .music-icon {
+      font-size: 14px;
+    }
+
+    .rsvp-card {
+      background-color: #fcf8f5;
+      width: 100%;
+      max-width: 480px;
+      padding: 40px 30px;
+      border: 1px solid #e2d7cd;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 54px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      color: #b08a5b;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #2c2c2c;
+      margin-bottom: 30px;
+    }
+
+    /* Contenedor de opciones de asistencia */
+    .attendance-options {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 35px;
+    }
+
+    .attendance-option {
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 50%;
+      padding: 18px 12px;
+      border: 2px solid transparent;
+      border-radius: 12px;
+      background-color: rgba(255, 255, 255, 0.4);
+      transition: all 0.25s ease-in-out;
+      position: relative;
+    }
+
+    .attendance-option:hover {
+      background-color: #ffffff;
+      border-color: #e2d7cd;
+    }
+
+    .attendance-option input[type="radio"] {
+      display: none;
+    }
+
+    .heart-icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 10px;
+      transition: transform 0.25s ease, filter 0.25s ease;
+    }
+
+    .heart-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .heart-icon.accept-icon svg {
+      fill: #a0784a;
+    }
+
+    .heart-icon.decline-icon svg {
+      fill: none;
+      stroke: #7a7a7a;
+      stroke-width: 1.5;
+    }
+
+    .option-label {
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #666666;
+      font-weight: 500;
+      line-height: 1.4;
+      transition: color 0.25s ease, font-weight 0.25s ease;
+    }
+
+    /* ESTADO SELECCIONADO (MEJORAS VISUALES) */
+    .attendance-option:has(input[type="radio"]:checked) {
+      background-color: #ffffff;
+      border-color: #b08a5b;
+      box-shadow: 0 6px 16px rgba(176, 138, 91, 0.15);
+      transform: translateY(-2px);
+    }
+
+    /* Cambio de ícono y texto a  l seleccionar "Acepto con gusto" */
+    .attendance-option:has(input[value="Acepto con gusto"]:checked) .heart-icon {
+      transform: scale(1.15);
+      filter: drop-shadow(0 3px 6px rgba(160, 120, 74, 0.3));
+    }
+
+    /* Cambio de ícono y texto al seleccionar "Siento no poder ir" */
+    .attendance-option:has(input[value="Siento no poder ir"]:checked) .heart-icon.decline-icon svg {
+      transform: scale(1.15);
+      filter: drop-shadow(0 3px 6px rgba(160, 120, 74, 0.3));
+    }
+
+    .attendance-option:has(input[value="Siento no poder ir"]:checked) .heart-icon {
+      transform: scale(1.15);
+    }
+
+    /* Texto seleccionado en negrita y color primario */
+    .attendance-option:has(input[type="radio"]:checked) .option-label {
+      color: #b08a5b;
+      font-weight: 600;
+    }
+
+    .form-group {
+      margin-bottom: 22px;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      color: #2c2c2c;
+      font-weight: 500;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="email"],
+    select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #7a7a7a;
+      background-color: transparent;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      color: #333;
+      outline: none;
+      border-radius: 0;
+    }
+
+    input::placeholder {
+      color: #999999;
+      font-style: italic;
+    }
+
+    select {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url('data:image/svg+xml;utf8,<svg fill="%23333333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      cursor: pointer;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background-color: #000000;
+      color: #ffffff;
+      border: none;
+      padding: 16px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: background-color 0.3s;
+    }
+
+    .btn-submit:hover {
+      background-color: #333333;
+    }
+
+    .btn-submit:disabled {
+      background-color: #999999;
+      cursor: not-allowed;
+    }
+
+    #statusMessage {
+      margin-top: 15px;
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Elemento de Audio -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="VamosBien.mp3" type="audio/mpeg">
+    Tu navegador no soporta el reproductor de audio.
+  </audio>
+
+  <!-- Botón reproductor flotante -->
+  <button id="musicToggle" class="music-control">
+    <span class="music-icon" id="musicIcon">🎵</span>
+    <span id="musicText">Música: OFF</span>
+  </button>
+
+  <div class="rsvp-card">
+    <h1 class="title">RSVP</h1>
+    <p class="subtitle">POR FAVOR CONFIRMA ANTES DEL 1 DE NOVIEMBRE</p>
+
+    <form id="rsvpForm">
+      <!-- Opciones de Asistencia -->
+      <div class="attendance-options">
+        <label class="attendance-option">
+          <input type="radio" name="attendance" value="Acepto con gusto" required>
+          <div class="heart-icon accept-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+          </div>
+          <span class="option-label">ACEPTO<br>CON GUSTO</span>
+        </label>
+
+        <label class="attendance-option">
+          <input type="radio" name="attendance" value="Siento no poder ir">
+          <div class="heart-icon decline-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+          </div>
+          <span class="option-label">LO SIENTO NO<br>PODER IR</span>
+        </label>
+      </div>
+
+      <!-- Campos del formulario -->
+      <div class="form-group">
+        <label for="numGuests">NÚMERO DE INVITADOS</label>
+        <select id="numGuests" name="numGuests">
+          <option value="" disabled selected>Seleccionar</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4 o más</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="guestNames">NOMBRES DE LOS INVITADOS</label>
+        <input type="text" id="guestNames" name="guestNames" placeholder="Daniel, Alex, Miya...">
+      </div>
+
+      <div class="form-group">
+        <label for="dietary">RESTRICCIONES ALIMENTARIAS</label>
+        <input type="text" id="dietary" name="dietary" placeholder="ej. alergias, vegano">
+      </div>
+
+      <div class="form-group">
+        <label>INFORMACIÓN DE CONTACTO</label>
+        <input type="text" id="contactName" name="contactName" placeholder="Nombre" style="margin-bottom: 12px;" required>
+        <input type="tel" id="contactPhone" name="contactPhone" placeholder="Teléfono" style="margin-bottom: 12px;">
+        <input type="email" id="contactEmail" name="contactEmail" placeholder="Correo electrónico" required>
+      </div>
+
+      <button type="submit" class="btn-submit" id="submitBtn">RESPONDER AHORA</button>
+      <div id="statusMessage"></div>
+    </form>
+  </div>
+
+  <script>
+    // --- LÓGICA DE CONTROL DE MÚSICA ---
+    const bgMusic = document.getElementById('bgMusic');
+    const musicToggle = document.getElementById('musicToggle');
+    const musicText = document.getElementById('musicText');
+    const musicIcon = document.getElementById('musicIcon');
+    let isPlaying = false;
+
+    // Iniciar al primer clic dentro de la página
+    document.body.addEventListener('click', function startAudioOnFirstInteraction() {
+      if (!isPlaying) {
+        toggleMusic();
+      }
+      document.body.removeEventListener('click', startAudioOnFirstInteraction);
+    }, { once: true });
+
+    musicToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMusic();
+    });
+
+    function toggleMusic() {
+      if (isPlaying) {
+        bgMusic.pause();
+        musicText.textContent = 'Música: OFF';
+        musicIcon.textContent = '🎵';
+        isPlaying = false;
+      } else {
+        bgMusic.play().then(() => {
+          musicText.textContent = 'Música: ON';
+          musicIcon.textContent = '🎶';
+          isPlaying = true;
+        }).catch(err => {
+          console.log("Autoplay bloqueado:", err);
+        });
+      }
+    }
+
+    // --- LÓGICA DE ENVÍO A GOOGLE SHEETS ---
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyjReaKFyt6DwpukC-3lDJN3HvC6vIlJ3FQI74X6JITetmRly_7RI-S_WmhupPIFbYv/exec';
+
+    const form = document.getElementById('rsvpForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const statusMessage = document.getElementById('statusMessage');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'ENVIANDO...';
+
+      const formData = {
+        attendance: form.querySelector('input[name="attendance"]:checked')?.value || '',
+        numGuests: form.numGuests.value,
+        guestNames: form.guestNames.value,
+        dietary: form.dietary.value,
+        contactName: form.contactName.value,
+        contactPhone: form.contactPhone.value,
+        contactEmail: form.contactEmail.value
+      };
+
+      fetch(scriptURL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      })
+      .then(() => {
+        statusMessage.style.color = '#b08a5b';
+        statusMessage.textContent = '¡Muchas gracias! Tu respuesta ha sido guardada.';
+        form.reset();
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'RESPONDER AHORA';
+      })
+      .catch(error => {
+        statusMessage.style.color = 'red';
+        statusMessage.textContent = '¡Error! Por favor intenta de nuevo.';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'RESPONDER AHORA';
+      });
+    });
+  </script>
+</body>
+</html>

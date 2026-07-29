@@ -148,7 +148,7 @@
       transition: color 0.25s ease, font-weight 0.25s ease;
     }
 
-    /* ESTADO SELECCIONADO (MEJORAS VISUALES) */
+    /* ESTADO SELECCIONADO */
     .attendance-option:has(input[type="radio"]:checked) {
       background-color: #ffffff;
       border-color: #b08a5b;
@@ -156,13 +156,11 @@
       transform: translateY(-2px);
     }
 
-    /* Cambio de ícono y texto a  l seleccionar "Acepto con gusto" */
     .attendance-option:has(input[value="Acepto con gusto"]:checked) .heart-icon {
       transform: scale(1.15);
       filter: drop-shadow(0 3px 6px rgba(160, 120, 74, 0.3));
     }
 
-    /* Cambio de ícono y texto al seleccionar "Siento no poder ir" */
     .attendance-option:has(input[value="Siento no poder ir"]:checked) .heart-icon.decline-icon svg {
       transform: scale(1.15);
       filter: drop-shadow(0 3px 6px rgba(160, 120, 74, 0.3));
@@ -172,7 +170,6 @@
       transform: scale(1.15);
     }
 
-    /* Texto seleccionado en negrita y color primario */
     .attendance-option:has(input[type="radio"]:checked) .option-label {
       color: #b08a5b;
       font-weight: 600;
@@ -195,7 +192,6 @@
 
     input[type="text"],
     input[type="tel"],
-    input[type="email"],
     select {
       width: 100%;
       padding: 12px 14px;
@@ -291,7 +287,7 @@
               <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
             </svg>
           </div>
-          <span class="option-label">LO SIENTO NO<br>PODER IR</span>
+          <span class="option-label">LO SIENTO, NO<br>PODER IR</span>
         </label>
       </div>
 
@@ -309,7 +305,7 @@
 
       <div class="form-group">
         <label for="guestNames">NOMBRES DE LOS INVITADOS</label>
-        <input type="text" id="guestNames" name="guestNames" placeholder="Daniel, Alex, Miya...">
+        <input type="text" id="guestNames" name="guestNames" placeholder="Nombre(s)">
       </div>
 
       <div class="form-group">
@@ -320,8 +316,7 @@
       <div class="form-group">
         <label>INFORMACIÓN DE CONTACTO</label>
         <input type="text" id="contactName" name="contactName" placeholder="Nombre" style="margin-bottom: 12px;" required>
-        <input type="tel" id="contactPhone" name="contactPhone" placeholder="Teléfono" style="margin-bottom: 12px;">
-        <input type="email" id="contactEmail" name="contactEmail" placeholder="Correo electrónico" required>
+        <input type="tel" id="contactPhone" name="contactPhone" placeholder="Teléfono" required>
       </div>
 
       <button type="submit" class="btn-submit" id="submitBtn">RESPONDER AHORA</button>
@@ -368,7 +363,7 @@
     }
 
     // --- LÓGICA DE ENVÍO A GOOGLE SHEETS ---
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyjReaKFyt6DwpukC-3lDJN3HvC6vIlJ3FQI74X6JITetmRly_7RI-S_WmhupPIFbYv/exec';
+    const scriptURL = 'TU_URL_DE_APPS_SCRIPT_AQUI';
 
     const form = document.getElementById('rsvpForm');
     const submitBtn = document.getElementById('submitBtn');
@@ -385,8 +380,7 @@
         guestNames: form.guestNames.value,
         dietary: form.dietary.value,
         contactName: form.contactName.value,
-        contactPhone: form.contactPhone.value,
-        contactEmail: form.contactEmail.value
+        contactPhone: form.contactPhone.value
       };
 
       fetch(scriptURL, {

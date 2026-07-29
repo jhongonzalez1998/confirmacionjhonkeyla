@@ -6,7 +6,7 @@
   <title>RSVP - Confirmación de Asistencia</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
@@ -85,10 +85,11 @@
       margin-bottom: 30px;
     }
 
-    /* Opciones de asistencia */
+    /* Contenedor de opciones de asistencia */
     .attendance-options {
       display: flex;
-      justify-content: space-around;
+      justify-content: space-between;
+      gap: 15px;
       margin-bottom: 35px;
     }
 
@@ -97,7 +98,18 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 45%;
+      width: 50%;
+      padding: 18px 12px;
+      border: 2px solid transparent;
+      border-radius: 12px;
+      background-color: rgba(255, 255, 255, 0.4);
+      transition: all 0.25s ease-in-out;
+      position: relative;
+    }
+
+    .attendance-option:hover {
+      background-color: #ffffff;
+      border-color: #e2d7cd;
     }
 
     .attendance-option input[type="radio"] {
@@ -105,10 +117,10 @@
     }
 
     .heart-icon {
-      width: 50px;
-      height: 50px;
-      margin-bottom: 12px;
-      transition: transform 0.2s, fill 0.2s;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 10px;
+      transition: transform 0.25s ease, filter 0.25s ease;
     }
 
     .heart-icon svg {
@@ -116,18 +128,54 @@
       height: 100%;
     }
 
+    .heart-icon.accept-icon svg {
+      fill: #a0784a;
+    }
+
+    .heart-icon.decline-icon svg {
+      fill: none;
+      stroke: #7a7a7a;
+      stroke-width: 1.5;
+    }
+
     .option-label {
       font-size: 11px;
       letter-spacing: 1.5px;
       text-transform: uppercase;
-      color: #2c2c2c;
+      color: #666666;
       font-weight: 500;
       line-height: 1.4;
+      transition: color 0.25s ease, font-weight 0.25s ease;
     }
 
-    /* Estado seleccionado */
-    .attendance-option input[type="radio"]:checked + .heart-icon {
-      transform: scale(1.1);
+    /* ESTADO SELECCIONADO (MEJORAS VISUALES) */
+    .attendance-option:has(input[type="radio"]:checked) {
+      background-color: #ffffff;
+      border-color: #b08a5b;
+      box-shadow: 0 6px 16px rgba(176, 138, 91, 0.15);
+      transform: translateY(-2px);
+    }
+
+    /* Cambio de ícono y texto al seleccionar "Acepto con gusto" */
+    .attendance-option:has(input[value="Acepto con gusto"]:checked) .heart-icon {
+      transform: scale(1.15);
+      filter: drop-shadow(0 3px 6px rgba(160, 120, 74, 0.3));
+    }
+
+    /* Cambio de ícono y texto al seleccionar "Siento no poder ir" */
+    .attendance-option:has(input[value="Siento no poder ir"]:checked) .heart-icon.decline-icon svg {
+      fill: #2c2c2c;
+      stroke: #2c2c2c;
+    }
+
+    .attendance-option:has(input[value="Siento no poder ir"]:checked) .heart-icon {
+      transform: scale(1.15);
+    }
+
+    /* Texto seleccionado en negrita y color primario */
+    .attendance-option:has(input[type="radio"]:checked) .option-label {
+      color: #b08a5b;
+      font-weight: 600;
     }
 
     .form-group {
@@ -208,7 +256,6 @@
 <body>
 
   <!-- Elemento de Audio -->
-  <!-- Reemplaza 'musica.mp3' con el nombre de tu archivo de música -->
   <audio id="bgMusic" loop preload="auto">
     <source src="Fonseca.mp3" type="audio/mpeg">
     Tu navegador no soporta el reproductor de audio.
@@ -229,8 +276,8 @@
       <div class="attendance-options">
         <label class="attendance-option">
           <input type="radio" name="attendance" value="Acepto con gusto" required>
-          <div class="heart-icon">
-            <svg viewBox="0 0 24 24" fill="#a0784a">
+          <div class="heart-icon accept-icon">
+            <svg viewBox="0 0 24 24">
               <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
             </svg>
           </div>
@@ -239,8 +286,8 @@
 
         <label class="attendance-option">
           <input type="radio" name="attendance" value="Siento no poder ir">
-          <div class="heart-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#2c2c2c" stroke-width="1.5">
+          <div class="heart-icon decline-icon">
+            <svg viewBox="0 0 24 24">
               <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
             </svg>
           </div>
@@ -321,7 +368,6 @@
     }
 
     // --- LÓGICA DE ENVÍO A GOOGLE SHEETS ---
-    // ⚠️ REEMPLAZA ESTA URL CON LA QUE TE DIO GOOGLE APPS SCRIPT
     const scriptURL = 'https://script.google.com/macros/s/AKfycbyjReaKFyt6DwpukC-3lDJN3HvC6vIlJ3FQI74X6JITetmRly_7RI-S_WmhupPIFbYv/exec';
 
     const form = document.getElementById('rsvpForm');

@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jhon & Keyla - Invitación de Boda</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-dark: #2a323d;       
+            --text-muted: #6e7a8a;      
+            --accent-blue: #a0b2c6;     
+            --accent-green: #8ca38a;    
+            --border-light: #e8edf3;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f4f6f8;
+            color: var(--text-dark);
+            line-height: 1.8;
+            text-align: center;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- APERTURA DE PUERTAS CON 1 SOLA IMAGEN CONTINUA --- */
+        #gate-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f4f6f8;
+            transition: visibility 1.2s ease;
+        }
+
+        .gate-frame {
+            width: 100%;
+            max-width: 480px;
+            height: 100vh;
+            display: flex;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.12);
+            overflow: hidden;
+        }
+
+        .gate-door {
+            width: 50%;
+            height: 100%;
+            background-image: url('./portada.png');
+            background-repeat: no-repeat;
+            background-size: 480px 100vh;
+            transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease 0.4s;
+            position: relative;
+        }
+
+        .gate-left {
+            background-position: left center;
+        }
+
+        .gate-right {
+            background-position: right center;
+        }
+
+        @media (max-width: 480px) {
+            .gate-door {
+                background-size: 100vw 100vh;
+            }
+        }
+
+        .gate-bow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10000;
+            cursor: pointer;
+            text-align: center;
+            transition: opacity 0.5s ease, transform 0.3s ease;
+        }
+
+        .bow-icon {
+            width: 75px;
+            height: 75px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--accent-blue);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            margin: 0 auto 10px auto;
+        }
+
+        .bow-text {
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-dark);
+            background: rgba(255,255,255,0.95);
+            padding: 5px 14px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        #gate-overlay.open .gate-left { transform: translateX(-100%); opacity: 0; }
+        #gate-overlay.open .gate-right { transform: translateX(100%); opacity: 0; }
+        #gate-overlay.open .gate-bow { opacity: 0; pointer-events: none; transform: translate(-50%, -50%) scale(0.6); }
+        #gate-overlay.open { visibility: hidden; pointer-events: none; }
+
+        /* --- CONTENEDOR PRINCIPAL --- */
+        .wrapper {
+            max-width: 450px;
+            margin: 0 auto;
+            background: var(--bg-color);
+            padding: 70px 30px;
+            box-shadow: 0 4px 40px rgba(0,0,0,0.02);
+            position: relative;
+        }
+
+        section { padding: 20px 5px; margin-bottom: 25px; }
+
+        .header-title {
+            font-size: 1.1rem;
+            letter-spacing: 7px;
+            text-transform: uppercase;
+            color: var(--text-dark);
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+
+        .names {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.8rem;
+            font-weight: 400;
+            color: var(--accent-blue);
+            line-height: 1.1;
+            margin: 20px 0;
+        }
+
+        .main-date-place {
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 400;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 0.85rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 25px;
+        }
+
+        .body-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.35rem;
+            color: var(--text-muted);
+            font-weight: 300;
+            line-height: 1.6;
+            max-width: 95%;
+            margin: 0 auto;
+        }
+
+        .body-text-sans {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 300;
+            letter-spacing: 1px;
+            line-height: 1.7;
+        }
+
+        .italic-phrase {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.35rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin: 20px auto;
+            max-width: 90%;
+        }
+
+        .card-divider {
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--border-light), transparent);
+            margin: 45px auto;
+            width: 85%;
+        }
+
+        /* --- ANIMACIONES BIDIRECCIONALES --- */
+        .reveal {
+            opacity: 0;
+            transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            will-change: transform, opacity;
+        }
+
+        .reveal-fade-up { transform: translateY(35px); }
+        .reveal-slide-left { transform: translateX(-40px); }
+        .reveal-slide-right { transform: translateX(40px); }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translate(0, 0);
+        }
+
+        /* IMÁGENES PNG */
+        .png-hero { max-width: 140px; height: auto; margin: 10px auto 20px auto; display: block; }
+        .png-venue { width: 100%; max-width: 260px; height: auto; border-radius: 8px; margin: 20px auto; display: block; }
+        .png-itinerary { width: 32px; height: 32px; object-fit: contain; margin-bottom: 8px; }
+        .png-dresscode { max-width: 130px; height: auto; margin: 20px auto; display: block; }
+
+        .map-button {
+            display: inline-block;
+            padding: 11px 45px;
+            border: 1px solid var(--text-dark);
+            background: transparent;
+            color: var(--text-dark);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            margin-top: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .map-button:hover { background: var(--text-dark); color: #ffffff; }
+
+        .itinerary-row { margin: 30px 0; display: flex; flex-direction: column; align-items: center; }
+        .itinerary-label { font-size: 0.8rem; letter-spacing: 4px; text-transform: uppercase; font-weight: 500; }
+        .itinerary-time { font-size: 0.75rem; letter-spacing: 1px; color: var(--text-muted); margin-top: 3px; }
+
+        .dress-main { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; color: var(--accent-blue); margin-bottom: 10px; }
+        .dress-desc { font-size: 0.8rem; letter-spacing: 1px; color: var(--text-muted); margin: 6px 0; }
+        .dress-alert { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-style: italic; margin-top: 25px; }
+
+        .timer-layout { display: flex; justify-content: center; gap: 25px; margin: 35px 0; }
+        .timer-cell { min-width: 65px; }
+        .timer-val { font-family: 'Cormorant Garamond', serif; font-size: 2.4rem; color: var(--accent-blue); display: block; line-height: 1; }
+        .timer-tag { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); margin-top: 8px; display: block; }
+
+        /* --- MODALES --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(42, 50, 61, 0.45);
+            backdrop-filter: blur(5px);
+            z-index: 10001;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            padding: 20px;
+        }
+
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+
+        .modal-card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 400px;
+            padding: 35px 25px;
+            border-radius: 4px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            position: relative;
+            text-align: center;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            line-height: 1;
+            padding: 5px;
+        }
+
+        #bank-modal .modal-card {
+            transform: translateX(-100%);
+            transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        #bank-modal.active .modal-card { transform: translateX(0); }
+
+        #rsvp-modal .modal-card {
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        #rsvp-modal.active .modal-card { transform: scale(1) translateY(0); }
+
+        /* TARJETAS DE CUENTAS BANCARIAS */
+        .bank-block {
+            background: #fafbfc;
+            padding: 15px;
+            border: 1px solid #eef2f6;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .bank-block-title {
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent-blue);
+            font-weight: 500;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #eef2f6;
+            padding-bottom: 4px;
+        }
+
+        .account-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px dashed #f0f4f8;
+            font-size: 0.8rem;
+        }
+
+        .account-item:last-child { border-bottom: none; }
+
+        .copy-btn {
+            background: #ffffff;
+            border: 1px solid #dbe3eb;
+            color: var(--text-dark);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            margin-left: 10px;
+        }
+
+        .copy-btn:hover { background: var(--text-dark); color: #ffffff; }
+
+        .input-box { margin: 20px 0; text-align: left; }
+        .input-box label { display: block; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+        .field-input { width: 100%; padding: 12px; border: 1px solid #dbe3eb; background: #ffffff; font-size: 0.85rem; outline: none; }
+        .companion-input-container { margin-top: 10px; padding-left: 10px; border-left: 2px solid var(--accent-blue); }
+
+        .option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .option-card { border: 1px solid #dbe3eb; padding: 12px; text-align: center; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); }
+        .option-card.selected { border-color: var(--text-dark); color: var(--text-dark); background: #fbfcfd; font-weight: 500; }
+
+        .submit-btn { width: 100%; padding: 14px; background: transparent; border: 1px solid var(--text-dark); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 3px; cursor: pointer; margin-top: 15px; font-weight: 500; }
+        .submit-btn:hover:not(:disabled) { background: var(--text-dark); color: #ffffff; }
+
+        #rsvp-success-msg {
+            display: none;
+            padding: 20px 10px;
+            background: #fbfcfd;
+            border: 1px solid var(--accent-blue);
+            margin-top: 15px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .music-player { position: fixed; bottom: 25px; right: 25px; z-index: 1000; background: rgba(255, 255, 255, 0.9); border: 1px solid var(--border-light); width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.06); }
+        .music-icon { width: 18px; height: 18px; fill: var(--text-dark); }
+        .music-player.playing { border-color: var(--accent-blue); animation: rotatePlayer 4s linear infinite; }
+        .music-player.playing .music-icon { fill: var(--accent-blue); }
+        @keyframes rotatePlayer { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <!-- PORTADA DE APERTURA AJUSTADA -->
+    <div id="gate-overlay">
+        <div class="gate-frame">
+            <div class="gate-door gate-left"></div>
+
+            <div class="gate-bow" onclick="openInvitation()">
+                <div class="bow-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2a323d" stroke-width="1.2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                </div>
+                <span class="bow-text">Abrir Invitación</span>
+            </div>
+
+            <div class="gate-door gate-right"></div>
+        </div>
+    </div>
+
+    <!-- AUDIO -->
+    <audio id="bg-music" loop playsinline>
+        <source src="./musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="music-player" id="music-toggle" onclick="toggleMusic()">
+        <svg class="music-icon" id="music-svg" viewBox="0 0 24 24">
+            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h6V3h-6z"/>
+        </svg>
+    </div>
+
+    <!-- MODAL DATOS BANCARIOS -->
+    <div class="modal-overlay" id="bank-modal" onclick="closeModalOnOutsideClick(event, 'bank-modal')">
+        <div class="modal-card">
+            <button class="modal-close-btn" onclick="toggleModal('bank-modal', false)">&times;</button>
+            <h3 class="section-title" style="margin-bottom: 5px;">Datos Bancarios</h3>
+            <p class="body-text-sans" style="font-size: 0.75rem; margin-bottom: 20px;">Transferencia Bancaria</p>
+            
+            <!-- BANCO GUAYAQUIL -->
+            <div class="bank-block">
+                <div class="bank-block-title">Banco Guayaquil</div>
+                <div class="account-item">
+                    <div><strong>Titular:</strong> Jhon Alen González Alvarado</div>
+                </div>
+                <div class="account-item">
+                    <div><strong>Tipo:</strong> Cta. Ahorros</div>
+                </div>
+                <div class="account-item">
+                    <div><strong>N.º Cuenta:</strong> <span id="acc-bg">0004224676</span></div>
+                    <button type="button" class="copy-btn" onclick="copyToClipboard('acc-bg', this)">Copiar</button>
+                </div>
+                <div class="account-item">
+                    <div><strong>Correo / CI:</strong> <span id="acc-email-bg">jhonalen98@gmail.com</span></div>
+                    <button type="button" class="copy-btn" onclick="copyToClipboard('acc-email-bg', this)">Copiar</button>
+                </div>
+            </div>
+
+            <!-- PRODUBANCO -->
+            <div class="bank-block">
+                <div class="bank-block-title">Produbanco</div>
+                <div class="account-item">
+                    <div><strong>Titular:</strong> Jhon Alen González Alvarado</div>
+                </div>
+                <div class="account-item">
+                    <div><strong>Tipo:</strong> Cta. Ahorros</div>
+                </div>
+                <div class="account-item">
+                    <div><strong>N.º Cuenta:</strong> <span id="acc-produ">18005059083</span></div>
+                    <button type="button" class="copy-btn" onclick="copyToClipboard('acc-produ', this)">Copiar</button>
+                </div>
+                <div class="account-item">
+                    <div><strong>Correo / CI:</strong> <span id="acc-email-produ">jhonalen98@gmail.com</span></div>
+                    <button type="button" class="copy-btn" onclick="copyToClipboard('acc-email-produ', this)">Copiar</button>
+                </div>
+            </div>
+
+            <button type="button" class="map-button" style="margin-top: 10px; width: 100%;" onclick="toggleModal('bank-modal', false)">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- MODAL RSVP -->
+    <div class="modal-overlay" id="rsvp-modal" onclick="closeModalOnOutsideClick(event, 'rsvp-modal')">
+        <div class="modal-card">
+            <button class="modal-close-btn" onclick="toggleModal('rsvp-modal', false)">&times;</button>
+            <h3 class="section-title" style="margin-bottom: 5px;">Confirmar Asistencia</h3>
+            <p class="body-text-sans" style="font-size: 0.75rem;">Por favor completa tus datos</p>
+
+            <form id="form-rsvp" onsubmit="enviarAsistencia(event)">
+                <div class="input-box">
+                    <label>Nombre Completo</label>
+                    <input type="text" id="rsvp-nombre" class="field-input" required placeholder="Ej: Juan Pérez">
+                </div>
+
+                <div class="input-box">
+                    <label>¿Asistirás?</label>
+                    <div class="option-grid">
+                        <div class="option-card selected" id="opt-si" onclick="setAttendance(true)">Sí, asistiré</div>
+                        <div class="option-card" id="opt-no" onclick="setAttendance(false)">No podré ir</div>
+                    </div>
+                </div>
+
+                <div class="input-box" id="guests-field">
+                    <label>Admisión</label>
+                    <input type="number" id="rsvp-invitados" class="field-input" min="1" max="10" value="1" onchange="generateCompanionFields()">
+                    <div id="dynamic-companions"></div>
+                </div>
+
+                <button type="submit" id="submit-btn" class="submit-btn">Enviar Confirmación</button>
+            </form>
+
+            <div id="rsvp-success-msg">
+                <p class="italic-phrase" style="font-size: 1.2rem; margin: 5px 0;">¡Gracias por responder!</p>
+                <p class="body-text-sans">Tu confirmación ha sido guardada con éxito.</p>
+                <button type="button" class="map-button" style="margin-top: 10px; width: 100%;" onclick="toggleModal('rsvp-modal', false)">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENIDO INTERNO -->
+    <div class="wrapper">
+        <section class="reveal reveal-fade-up">
+            <h1 class="header-title">¡Nos Casamos!</h1>
+            <img src="./flor.png" alt="Decoración Floral" class="png-hero">
+            <div class="names">Jhon & Keyla</div>
+            <p class="main-date-place">07 de Noviembre de 2026 • Bosque Aventura</p>
+            
+            <div id="invitado-personalizado" style="display: none; margin: 25px 0;">
+                <p style="font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; color: var(--accent-blue);">Pase especial para</p>
+                <h3 id="nombre-invitado-display" style="font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; color: var(--text-dark); font-weight: 400;"></h3>
+            </div>
+
+            <h2 class="section-title">Bienvenida</h2>
+            <p class="body-text">Con la bendición de Dios y nuestras familias, tenemos el honor de invitarte a celebrar nuestro matrimonio.</p>
+            <p class="italic-phrase">"Hemos compartido sueños, desafíos y cada etapa de nuestras vidas. Hoy, guiados por la mano de Dios, elegimos caminar juntos para siempre."</p>
+        </section>
+
+        <div class="card-divider"></div>
+
+        <section>
+            <div class="reveal reveal-slide-left">
+                <h2 class="section-title">Ceremonia y Recepción</h2>
+                <p class="body-text" style="color: var(--text-dark); font-weight: 400; font-size: 1.5rem;">Bosque Aventura</p>
+            </div>
+            
+            <img src="./boceto bosque aventura.png" alt="Bosque Aventura" class="png-venue reveal reveal-slide-right">
+            
+            <div class="reveal reveal-fade-up">
+                <p class="body-text-sans">Sábado, 07 de Noviembre — 5:00 PM<br>Km 33 Vía a la Costa</p>
+                <a href="https://maps.google.com" target="_blank" class="map-button">Ver Mapa</a>
+            </div>
+
+            <div class="itinerary-grid reveal reveal-fade-up">
+                <div class="card-divider" style="width: 35%; margin: 50px auto 30px auto;"></div>
+                <h3 class="section-title" style="font-size: 0.75rem; letter-spacing: 5px;">Itinerario</h3>
+                <div class="itinerary-row">
+                    <img src="./6.png" alt="Ceremonia" class="png-itinerary">
+                    <span class="itinerary-label">Ceremonia</span>
+                    <span class="itinerary-time">5:00 PM</span>
+                </div>
+                <div class="itinerary-row">
+                    <img src="./8.png" alt="Cóctel" class="png-itinerary">
+                    <span class="itinerary-label">Cóctel</span>
+                    <span class="itinerary-time">6:00 PM</span>
+                </div>
+                <div class="itinerary-row">
+                    <img src="./7.png" alt="Recepción" class="png-itinerary">
+                    <span class="itinerary-label">Recepción</span>
+                    <span class="itinerary-time">7:00 PM</span>
+                </div>
+                <div class="itinerary-row">
+                    <img src="./disco.png" alt="Celebración" class="png-itinerary">
+                    <span class="itinerary-label">Celebración</span>
+                    <span class="itinerary-time">8:00 PM</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="card-divider"></div>
+
+        <section class="reveal reveal-fade-up">
+            <h2 class="section-title">Dress Code</h2>
+            <p class="dress-main">Formal Campestre</p>
+            <img src="./dress code sin fondo.png" alt="Dress Code" class="png-dresscode reveal reveal-slide-left">
+            <p class="dress-desc"><strong>Damas:</strong> Vestido midi o largo</p>
+            <p class="dress-desc"><strong>Caballeros:</strong> Pantalón, camisa y blazer</p>
+            <p class="dress-alert">El blanco está reservado para la novia</p>
+        </section>
+
+        <div class="card-divider"></div>
+
+        <section class="reveal reveal-fade-up">
+            <h2 class="section-title">Confirmación</h2>
+            <p class="body-text-sans" style="margin-bottom: 25px;">Esperamos con ansias compartir este día contigo. Por favor confirma tu asistencia antes del 15 de octubre de 2026.</p>
+
+            <button type="button" class="map-button" onclick="toggleModal('rsvp-modal', true)">
+                Confirmar Asistencia
+            </button>
+
+            <div class="card-divider" style="width: 30%; margin: 45px auto 20px auto;"></div>
+            <p class="section-title" style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 10px;">Solo Faltan</p>
+            <div class="timer-layout">
+                <div class="timer-cell"><span class="timer-val" id="dias">00</span><span class="timer-tag">Días</span></div>
+                <div class="timer-cell"><span class="timer-val" id="horas">00</span><span class="timer-tag">Horas</span></div>
+                <div class="timer-cell"><span class="timer-val" id="minutos">00</span><span class="timer-tag">Min</span></div>
+            </div>
+        </section>
+
+        <div class="card-divider"></div>
+
+        <section class="reveal reveal-fade-up">
+            <h2 class="section-title">Lluvia de Sobres</h2>
+            <p class="body-text-sans" style="margin-bottom: 20px;">Tu presencia será nuestro mayor regalo. Si deseas obsequiarnos algo adicional, puedes hacerlo mediante un sobre cerrado o a través de transferencia bancaria.</p>
+            
+            <button type="button" class="map-button" onclick="toggleModal('bank-modal', true)">Ver Datos Bancarios</button>
+            
+            <p class="italic-phrase" style="margin-top: 45px;">"Hay momentos en la vida que son especiales por sí solos. Compartirlos contigo los convierte en inolvidables. Gracias por acompañarnos."</p>
+            <p class="header-title" style="margin-top: 40px; color: var(--accent-blue);">Jhon & Keyla</p>
+            <p style="font-size: 0.7rem; letter-spacing: 4px; color: var(--text-muted); margin-top: 5px;">2026</p>
+        </section>
+    </div>
+
+    <script>
+        const audio = document.getElementById('bg-music');
+        const btn = document.getElementById('music-toggle');
+        let asistenciaSeleccionada = "Sí, asistiré";
+
+        const SHEET_URL = 'AQUÍ_VA_TU_URL_DE_GOOGLE_APPS_SCRIPT';
+
+        function openInvitation() {
+            document.getElementById('gate-overlay').classList.add('open');
+            if (audio.paused) {
+                audio.play().then(() => { btn.classList.add('playing'); }).catch(() => {});
+            }
+        }
+
+        function toggleMusic() {
+            if (audio.paused) {
+                audio.play().then(() => { btn.classList.add('playing'); });
+            } else {
+                audio.pause();
+                btn.classList.remove('playing');
+            }
+        }
+
+        function toggleModal(modalId, show) {
+            const modal = document.getElementById(modalId);
+            if (show) modal.classList.add('active');
+            else modal.classList.remove('active');
+        }
+
+        function closeModalOnOutsideClick(event, modalId) {
+            if (event.target.id === modalId) toggleModal(modalId, false);
+        }
+
+        function copyToClipboard(elementId, btnElement) {
+            const textToCopy = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalText = btnElement.innerText;
+                btnElement.innerText = "¡Copiado!";
+                btnElement.style.background = "var(--accent-blue)";
+                btnElement.style.color = "#fff";
+                setTimeout(() => {
+                    btnElement.innerText = originalText;
+                    btnElement.style.background = "#ffffff";
+                    btnElement.style.color = "var(--text-dark)";
+                }, 2000);
+            });
+        }
+
+        function setAttendance(willAttend) {
+            const btnSi = document.getElementById('opt-si');
+            const btnNo = document.getElementById('opt-no');
+            const guestsField = document.getElementById('guests-field');
+
+            if (willAttend) {
+                btnSi.classList.add('selected');
+                btnNo.classList.remove('selected');
+                guestsField.style.display = 'block';
+                asistenciaSeleccionada = "Sí, asistiré";
+                generateCompanionFields();
+            } else {
+                btnNo.classList.add('selected');
+                btnSi.classList.remove('selected');
+                guestsField.style.display = 'none';
+                asistenciaSeleccionada = "No podré ir";
+            }
+        }
+
+        function generateCompanionFields() {
+            const numInvitados = parseInt(document.getElementById('rsvp-invitados').value) || 1;
+            const container = document.getElementById('dynamic-companions');
+            container.innerHTML = "";
+
+            if (numInvitados > 1 && asistenciaSeleccionada === "Sí, asistiré") {
+                for (let i = 2; i <= numInvitados; i++) {
+                    const div = document.createElement('div');
+                    div.className = 'companion-input-container';
+                    div.innerHTML = `
+                        <label style="font-size: 0.7rem; margin-top:10px; display:block;">Nombre del Acompañante ${i}</label>
+                        <input type="text" class="field-input companion-name" required placeholder="Nombre y Apellido">
+                    `;
+                    container.appendChild(div);
+                }
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const para = urlParams.get('para');
+            const pases = urlParams.get('pases');
+
+            if (para) {
+                const container = document.getElementById('invitado-personalizado');
+                const display = document.getElementById('nombre-invitado-display');
+                const inputNombre = document.getElementById('rsvp-nombre');
+                if (container && display) {
+                    display.innerText = para;
+                    container.style.display = 'block';
+                }
+                if (inputNombre) inputNombre.value = para;
+            }
+
+            if (pases) {
+                const inputPases = document.getElementById('rsvp-invitados');
+                if (inputPases) {
+                    inputPases.value = pases;
+                    inputPases.max = pases;
+                    generateCompanionFields();
+                }
+            }
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    } else {
+                        entry.target.classList.remove('active');
+                    }
+                });
+            }, { threshold: 0.15 });
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        });
+
+        function enviarAsistencia(event) {
+            event.preventDefault();
+            const submitBtn = document.getElementById('submit-btn');
+            const form = document.getElementById('form-rsvp');
+            const successMsg = document.getElementById('rsvp-success-msg');
+            const nombrePrincipal = document.getElementById('rsvp-nombre').value;
+            const totalAdmisiones = asistenciaSeleccionada === "Sí, asistiré" ? document.getElementById('rsvp-invitados').value : 0;
+
+            if(SHEET_URL === 'AQUÍ_VA_TU_URL_DE_GOOGLE_APPS_SCRIPT') {
+                alert('Por favor configura la URL de Apps Script en el código.');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Enviando...";
+
+            let nombresAcompanantes = [];
+            document.querySelectorAll('.companion-name').forEach(input => {
+                if (input.value.trim() !== "") nombresAcompanantes.push(input.value.trim());
+            });
+
+            let nombreCompletoRegistro = nombrePrincipal;
+            if (nombresAcompanantes.length > 0) {
+                nombreCompletoRegistro += ` (Acompañantes: ${nombresAcompanantes.join(', ')})`;
+            }
+
+            fetch(SHEET_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    nombre: nombreCompletoRegistro,
+                    asistencia: asistenciaSeleccionada,
+                    invitados: totalAdmisiones
+                })
+            })
+            .then(() => {
+                form.style.display = 'none';
+                successMsg.style.display = 'block';
+            })
+            .catch(() => {
+                alert('Hubo un problema al guardar. Intenta nuevamente.');
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Enviar Confirmación";
+            });
+        }
+
+        const target = new Date('November 7, 2026 17:00:00').getTime();
+        setInterval(function() {
+            const now = new Date().getTime();
+            const diff = target - now;
+            if (diff <= 0) return;
+            document.getElementById('dias').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById('horas').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById('minutos').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        }, 1000);
+    </script>
+</body>
+</html>
